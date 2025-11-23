@@ -7,7 +7,7 @@ int factorial(int n) {
         fact *= i;
     return fact;
 }
-// Newton Backward Interpolation Function
+// Newton Backward Interpolation Function with Difference Table Printing
 double newtonBackward(double x[], double y[], int n, double value) {
     double h = x[1] - x[0];         // Step size (assumed equal interval)
     double u = (value - x[n-1]) / h;
@@ -15,11 +15,19 @@ double newtonBackward(double x[], double y[], int n, double value) {
     double diff[n][n];
     for (int i = 0; i < n; i++)
         diff[i][0] = y[i];
-
     for (int j = 1; j < n; j++) {
         for (int i = n - 1; i >= j; i--) {
             diff[i][j] = diff[i][j-1] - diff[i-1][j-1];
         }
+    }
+    cout << "\nBackward Difference Table:\n";
+    cout << "x\tf(x)\tnebla1\tnebla2\tnebla3\tnebla4\n";
+    for (int i = 0; i < n; i++) {
+        cout << x[i] << "\t";
+        for (int j = 0; j <= i; j++) {
+            cout << diff[i][j] << "\t";
+        }
+        cout << endl;
     }
     // Apply Newton Backward Formula
     double result = y[n-1];     // Start with y_n
@@ -46,6 +54,6 @@ int main() {
     cout << "Enter the value to interpolate: ";
     cin >> value;
     double ans = newtonBackward(x, y, n, value);
-    cout << "Interpolated value at " << value << " is: " << ans << endl;
+    cout << "\nInterpolated value at " << value << " is: " << ans << endl;
     return 0;
 }
